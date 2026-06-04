@@ -1,6 +1,6 @@
 package com.policene.eventhub.dto.auth;
 
 public record AuthResponseDTO(
-        String token
-
+        String accessToken,
+        String refreshToken
 ) { }
