@@ -5,12 +5,15 @@ import com.policene.eventhub.entity.User;
 import com.policene.eventhub.repository.RefreshTokenRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.Base64;
 import java.util.UUID;
 
@@ -36,8 +39,8 @@ public class RefreshTokenService {
         }
     }
 
-    private LocalDateTime getExpirationDate () {
-        return LocalDateTime.now().plusDays(refreshTokenExpirationDays);
+    private Instant getExpirationDate () {
+        return Instant.now().plus(refreshTokenExpirationDays, ChronoUnit.DAYS);
     }
 
     public RefreshToken getByToken (String token) {
@@ -75,8 +78,10 @@ public class RefreshTokenService {
         refreshTokenRepository.revokeToken(encodedToken);
     }
 
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void revokeAllByUser (User user) {
-        refreshTokenRepository.revokeAllByUser(user);
+        int teste = refreshTokenRepository.revokeAllByUser(user);
+        System.out.println(teste);
     }
 
     @Transactional

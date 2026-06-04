@@ -20,7 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 @Service
 public class AuthService  {
@@ -87,7 +87,7 @@ public class AuthService  {
         }
 
         if (oldRefreshToken.isRevoked()) throw new SecurityException("Refresh token já revogado.");
-        if (oldRefreshToken.getExpiresAt().isBefore(LocalDateTime.now())) throw new SecurityException("Refresh token expirado");
+        if (oldRefreshToken.getExpiresAt().isBefore(Instant.now())) throw new SecurityException("Refresh token expirado");
 
         refreshTokenService.consume(request.refreshToken());
 

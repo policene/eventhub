@@ -3,7 +3,7 @@ package com.policene.eventhub.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 @Entity
 @Table(name = "refresh_tokens")
@@ -23,7 +23,7 @@ public class RefreshToken {
     private String token;
 
     @Column(name = "expires_at", nullable = false)
-    private LocalDateTime expiresAt;
+    private Instant expiresAt;
 
     @Column(name = "used", nullable = false)
     private boolean used;

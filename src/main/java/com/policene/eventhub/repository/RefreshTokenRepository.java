@@ -2,6 +2,7 @@ package com.policene.eventhub.repository;
 
 import com.policene.eventhub.entity.RefreshToken;
 import com.policene.eventhub.entity.User;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -13,6 +14,7 @@ import java.util.Optional;
 
 public interface RefreshTokenRepository extends JpaRepository<RefreshToken, Long> {
 
+    @EntityGraph(attributePaths = {"user"})
     Optional<RefreshToken> getByToken (String token);
 
     @Modifying
@@ -23,7 +25,7 @@ public interface RefreshTokenRepository extends JpaRepository<RefreshToken, Long
     @Modifying
     @Transactional
     @Query("UPDATE RefreshToken rt SET rt.revoked = true WHERE rt.user = :user")
-    void revokeAllByUser(@Param(value = "user") User user);
+    int revokeAllByUser(@Param(value = "user") User user);
 
     @Modifying
     @Transactional
